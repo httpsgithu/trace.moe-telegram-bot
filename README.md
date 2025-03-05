@@ -1,16 +1,16 @@
 # trace.moe-telegram-bot
 
 [![License](https://img.shields.io/github/license/soruly/trace.moe-telegram-bot.svg?style=flat-square)](https://github.com/soruly/trace.moe-telegram-bot/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/soruly/trace.moe-telegram-bot/Node.js%20CI?style=flat-square)](https://github.com/soruly/trace.moe-telegram-bot/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/soruly/trace.moe-telegram-bot/docker-image.yml?style=flat-square)](https://github.com/soruly/trace.moe-telegram-bot/actions)
+[![Docker](https://img.shields.io/docker/pulls/soruly/trace.moe-telegram-bot?style=flat-square)](https://hub.docker.com/r/soruly/trace.moe-telegram-bot)
+[![Docker Image Size](https://img.shields.io/docker/image-size/soruly/trace.moe-telegram-bot/latest?style=flat-square)](https://hub.docker.com/r/soruly/trace.moe-telegram-bot)
 [![Discord](https://img.shields.io/discord/437578425767559188.svg?style=flat-square)](https://discord.gg/K9jn6Kj)
 
 This Telegram Bot can tell the anime when you send an screenshot to it
 
-The bot is live on telegram now https://telegram.me/WhatAnimeBot
+https://telegram.me/WhatAnimeBot
 
-## Demo (YouTube)
-
-[![](https://img.youtube.com/vi/5C9nD5dtRrY/0.jpg)](https://www.youtube.com/watch?v=5C9nD5dtRrY)
+https://user-images.githubusercontent.com/1979746/126060529-8a33523a-967b-48de-9f67-bd0273076e7b.mp4
 
 ## Features
 
@@ -43,16 +43,38 @@ Please read [Telegram's official tutorial to create a Bot](https://core.telegram
 
 You need to disable [Privacy Mode](https://core.telegram.org/bots#privacy-mode) if you want to use your bot in group chat.
 
-### Prerequisites
+### Environment Variables
 
-- Node.js 14.x
-- Redis
-- git
-- [pm2](https://pm2.keymetrics.io/) (optional)
+```
+TELEGRAM_TOKEN=       # e.g. 111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+TELEGRAM_WEBHOOK=     # e.g. https://your.host.com/
+PORT=                 # (optional) Default: 3000
+TRACE_MOE_KEY=        # (optional)
+ANILIST_API_URL=      # (optional) Default: https://graphql.anilist.co/
+```
 
-### Install
+### Deploy to Heroku
 
-Install Prerequisites first, then:
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/soruly/trace.moe-telegram-bot)
+
+### Host with docker
+
+Docker Image available on [Docker Hub](https://hub.docker.com/repository/docker/soruly/trace.moe-telegram-bot) or [GitHub Container Registry](https://github.com/soruly/trace.moe-telegram-bot/pkgs/container/trace.moe-telegram-bot)
+
+```
+docker run -it --rm --name trace-moe-tg-bot \
+  -e TELEGRAM_WEBHOOK=https://your.host.com/ \
+  -e TELEGRAM_TOKEN=111111111:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA \
+  -p 443:3000 \
+  ghcr.io/soruly/trace.moe-telegram-bot:latest
+
+```
+
+Note that you need to configure a reverse proxy if you need HTTPS.
+
+### Host bare-metal with Node.js
+
+Install Node.js >= 20.12, then:
 
 ```
 git clone https://github.com/soruly/trace.moe-telegram-bot.git
@@ -60,26 +82,16 @@ cd trace.moe-telegram-bot
 npm install
 ```
 
-### Configuration
-
 - Copy `.env.example` to `.env`
-- Edit `.env` as follows
-
-```
-SERVER_PORT=        # e.g. 3000
-REDIS_HOST=         # Usually 127.0.0.1
-TELEGRAM_TOKEN=     # e.g. 12345678:AAAAAAAAaA1AA1aa1Aaa1a_aAAaa-1aaAaa
-TELEGRAM_WEBHOOK=   # e.g. https://your.host.name/12345678:AAAAAAAAaA1AA1aa1Aaa1a_aAAaa-1aaAaa
-TRACE_MOE_KEY=      # Usually leave this empty
-```
-
-### Start server
+- Edit `.env` as you need
 
 ```
 node server.js
 ```
 
-You also can use pm2 to run this in background in cluster mode.
+### Host bare-metal with pm2
+
+You also can use [pm2](https://pm2.keymetrics.io/) to run this in background in cluster mode.
 
 Use below commands to start / restart / stop server.
 
